@@ -102,14 +102,17 @@ def get_palette16(palette):
     full_palette[64:128] = full_palette[:64] // 2
     full_palette[192:] = full_palette[128:192] // 2
 
+    # Reduce values to 0-31 for red and blue
     full_palette //= 8
 
-    b = full_palette[:,0]
-    g = full_palette[:,1]
-    r = full_palette[:,2]
+    b = full_palette[:,0]            # 5 bits
+    g = full_palette[:,1]            # 5 bits -> need 6 bits
+    r = full_palette[:,2]            # 5 bits
 
-    return b + (g * 32) + (r * 1024)
+    g = g * 2                        # Scale green to 6 bits (0-63)
 
+    # Pack into RGB565
+    return (r << 11) + (g << 5) + b
 
 def right_triangle(isometric, palette, x0, y0):
     tri = []
