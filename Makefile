@@ -8,7 +8,7 @@ GENZEHN = genzehn
 
 GCCFLAGS = -Wall -W -marm
 LDFLAGS =
-ZEHNFLAGS = --name "blocks2"
+ZEHNFLAGS = --name "Blocks-TI-NSPIRE"
 
 ifeq ($(DEBUG),FALSE)
 	GCCFLAGS += -Os
@@ -19,7 +19,7 @@ endif
 OBJS = $(patsubst %.c, %.o, $(shell find . -name \*.c))
 OBJS += $(patsubst %.cpp, %.o, $(shell find . -name \*.cpp))
 OBJS += $(patsubst %.S, %.o, $(shell find . -name \*.S))
-EXE = blocks2
+EXE = blocks-ti-nspire
 DISTDIR = .
 vpath %.tns $(DISTDIR)
 vpath %.elf $(DISTDIR)
