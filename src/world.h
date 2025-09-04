@@ -1,7 +1,8 @@
 #pragma once
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 #include <string.h>
+
 #include "block.h"
 #include "textures.h"
 
@@ -20,15 +21,13 @@
 
 // -------- Triangle Grid --------
 // Graphical information about the world is stored in a 2d hexagonal triangle
-// grid, which allows lookup for the closest block to the camera in each 
+// grid, which allows lookup for the closest block to the camera in each
 // isometric position
 
 #define TRI_CNT (((WORLD_SIZE * WORLD_SIZE) + (2 * WORLD_SIZE * WORLD_HEIGHT)) * 2)
 #define ROW_CNT (WORLD_SIZE + WORLD_SIZE + WORLD_HEIGHT + WORLD_HEIGHT - 1)
 
-inline uint8_t project_view_depth(uint8_t x, uint8_t y, uint8_t z) {
-    return x + z + (WORLD_HEIGHT - 1 - y);
-}
+inline uint8_t project_view_depth(uint8_t x, uint8_t y, uint8_t z) { return x + z + (WORLD_HEIGHT - 1 - y); }
 
 inline uint8_t project_light_depth(uint8_t x, uint8_t y, uint8_t z) {
     return x + (WORLD_SIZE - 1 - z) + (WORLD_HEIGHT - 1 - y);
@@ -50,6 +49,9 @@ typedef struct world {
     // 3D array of the world, indexed as [Y, X, Z]
     Block_t blocks[WORLD_HEIGHT][WORLD_SIZE][WORLD_SIZE];
 
+    // The projected depth of each block from the view of the sun.
+    uint8_t tri_grid_shadow[TRI_CNT];
+
     // The associated texture for each triangle
     uint8_t tri_grid_tex[TRI_CNT];
     // The flags determining drawing information for each triangle
@@ -58,34 +60,33 @@ typedef struct world {
     uint8_t tri_grid_depth[TRI_CNT];
 
     // Indices into the above array for the start of each row segment
-    uint24_t tri_grid_rows[ROW_CNT];
+    int tri_grid_rows[ROW_CNT];
 
     // Adjustment offset because rows change length at different rates across the hexagon
-    int24_t tri_grid_row_offset[ROW_CNT];
+    int tri_grid_row_offset[ROW_CNT];
 
     // Pixel offset from the center for each row's starting point
-    int24_t tri_grid_row_px_offset[ROW_CNT];
+    int tri_grid_row_px_offset[ROW_CNT];
 
-    uint24_t tri_grid_row_width[ROW_CNT];
-
+    int tri_grid_row_width[ROW_CNT];
 
     /* Populates the LUTs for indexing into the trigrid */
     void init_tri_grid();
 
     /* Sweeps through blocks in the world starting from (x, y, z) and apply steps of
-    * (dx, dy, dz) to offset the search. Return true if we find a solid block, false
-    * if we reach the world border first
-    */
+     * (dx, dy, dz) to offset the search. Return true if we find a solid block, false
+     * if we reach the world border first
+     */
     bool sweep_ray(int x, int y, int z, int dx, int dy, int dz);
 
     /* Sweep through the world from a certain point to see if if the top of
-    * the block is in shadow. Returns the proper flags for that face
-    */
+     * the block is in shadow. Returns the proper flags for that face
+     */
     uint8_t compute_top_shadow(uint8_t x, uint8_t y, uint8_t z);
 
     /* Sweep through the world from a certain point to see if if the left side
-    * of the block is in shadow. Returns the proper flags for that face
-    */
+     * of the block is in shadow. Returns the proper flags for that face
+     */
     uint8_t compute_left_shadow(uint8_t x, uint8_t y, uint8_t z);
 
     // On an infinite grid, we can increment each coordinate using these rules

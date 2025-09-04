@@ -19,7 +19,6 @@ typedef uint8_t Texture_t[6][TEX_SIZE];
 // The color palette for all our textures
 extern uint16_t tex_palette[256];
 
-
 extern Texture_t textures[TEX_CNT];
 
 extern Texture_t player_tex;
@@ -34,7 +33,6 @@ extern Texture_t player_tex;
 
 extern uint8_t* shadow_masks[4][6];
 
-
 #define WATER_NONE 0
 #define WATER_HALF 16
 #define WATER_FULL 32
@@ -43,6 +41,3 @@ extern uint8_t* shadow_masks[4][6];
 #define WATER_OFFSET 4
 
 extern uint8_t* water_masks[3][6];
-
-
-void init_palette();
