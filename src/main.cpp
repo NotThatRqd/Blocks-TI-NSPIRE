@@ -70,6 +70,7 @@ void init_play(uint8_t world_id, world_t* world, player_t& player) {
         back_buffer[i] = tex_palette[SKY];
     }
 
+    // th
     draw_x0 = 0;
     draw_y0 = 0;
     draw_x1 = SCREEN_WIDTH;
@@ -78,7 +79,7 @@ void init_play(uint8_t world_id, world_t* world, player_t& player) {
     // gfx_SetDrawBuffer();
     draw_tri_grid(*world);
 
-    // player.draw();
+    player.draw();
 }
 
 void play(uint8_t world_id) {
@@ -98,6 +99,11 @@ void play(uint8_t world_id) {
     }
     player_t player;
     player.current_block = STONE;
+
+    // ohg
+    player.x = 0;
+    player.y = 0;
+    player.z = 0;
 
     init_play(world_id, world, player);
 
@@ -210,7 +216,6 @@ void play(uint8_t world_id) {
         }
 
         if (isKeyPressed(KEY_NSPIRE_A)) {
-            // memset(back_buffer, tex_palette[SKY], LCD_CNT * sizeof(uint16_t));
             for (int i = 0; i < LCD_CNT; i++) {
                 back_buffer[i] = tex_palette[SKY];
             }
@@ -383,6 +388,10 @@ int main(void) {
         lcd_init(SCR_TYPE_INVALID);  // Reset screen mode
         return 0;
     }
+
+    // char string[20];
+    // sprintf(string, "%lu", (unsigned long)sizeof(int));
+    //_show_msgbox("sizeof(int) is equal to:", string, 0);
 
     init();
 

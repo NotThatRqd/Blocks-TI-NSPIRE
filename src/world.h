@@ -60,15 +60,15 @@ typedef struct world {
     uint8_t tri_grid_depth[TRI_CNT];
 
     // Indices into the above array for the start of each row segment
-    int tri_grid_rows[ROW_CNT];
+    uint32_t tri_grid_rows[ROW_CNT];
 
     // Adjustment offset because rows change length at different rates across the hexagon
-    int tri_grid_row_offset[ROW_CNT];
+    uint32_t tri_grid_row_offset[ROW_CNT];
 
     // Pixel offset from the center for each row's starting point
-    int tri_grid_row_px_offset[ROW_CNT];
+    uint32_t tri_grid_row_px_offset[ROW_CNT];
 
-    int tri_grid_row_width[ROW_CNT];
+    uint32_t tri_grid_row_width[ROW_CNT];
 
     /* Populates the LUTs for indexing into the trigrid */
     void init_tri_grid();
@@ -97,6 +97,9 @@ typedef struct world {
     // s represents the pair of triangles we are projecting to
     // 0 - bottom, 1 - mid, 2 - top
     int project(uint8_t x, uint8_t y, uint8_t z, uint8_t s);
+
+    // for testing
+    int projecttwo(uint32_t x, uint32_t y, uint32_t z, uint32_t s);
 
     void unproject(int row, int idx, int depth, uint8_t &x, uint8_t &y, uint8_t &z);
 

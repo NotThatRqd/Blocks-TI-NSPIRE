@@ -135,6 +135,36 @@ int world::project(uint8_t x, uint8_t y, uint8_t z, uint8_t s) {
     return tri_grid_rows[row] + idx;
 }
 
+int world::projecttwo(uint32_t x, uint32_t y, uint32_t z, uint32_t s) {
+    char string[20];
+    sprintf(string, "%ld", x);
+    _show_msgbox("x is:", string, 0);  // 0
+
+    sprintf(string, "%ld", y);
+    _show_msgbox("y is:", string, 0);  // 1
+
+    sprintf(string, "%ld", z);
+    _show_msgbox("z is:", string, 0);  // 0
+
+    // the
+
+    uint32_t row = x + y + y + z + s;
+    sprintf(string, "%ld", row);
+    _show_msgbox("row is:", string, 0);  // 4
+
+    // tri grid row offset is wrong
+    uint32_t idx = x + x + y + y + tri_grid_row_offset[row] + s;
+    sprintf(string, "%ld", idx);
+    _show_msgbox("idx is:", string, 0);  // -443731820
+
+    sprintf(string, "%ld", tri_grid_rows[row]);
+    _show_msgbox("first half is:", string, 0);  // -498913152
+
+    return tri_grid_rows[row] + idx;
+
+    // TODO: tri_grid_rows and or tri_grid_row_offset is wrong
+}
+
 void world::unproject(int row, int idx, int depth, uint8_t &x, uint8_t &y, uint8_t &z) {
     int A = row;
     int B = idx - tri_grid_row_offset[row];

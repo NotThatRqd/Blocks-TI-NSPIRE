@@ -9,8 +9,7 @@ typedef struct player {
 
     world_t *world;
 
-    void move(int8_t dx, int8_t dy, int8_t dz) {}
-    void _move(int8_t dx, int8_t dy, int8_t dz) {
+    void move(int8_t dx, int8_t dy, int8_t dz) {
         undraw();
 
         x += dx;
@@ -25,8 +24,7 @@ typedef struct player {
         draw();
     }
 
-    void draw() {}
-    void _draw() {
+    void draw() {
         int screen_x = scroll_x + 160 + (16 * x) - (16 * z);
         int screen_y = scroll_y + 209 - (8 * x) - (8 * z) - (16 * y);
 
@@ -34,9 +32,20 @@ typedef struct player {
         uint8_t depth = project_view_depth(x, y, z);
 
         _show_msgbox("Ok Jarmin", "before tri grid idx", 0);
-        int tri_grid_idx = world->project(x, y, z, TOP_FACE);
+        int tri_grid_idx = world->projecttwo((uint32_t)x, (uint32_t)y, (uint32_t)z,
+                                             (uint32_t)TOP_FACE);  // WHY THE FUCK IS THIS NEGATIVE?????
+        // tri_grid_idx now is equal to -942644972
+
+        if (tri_grid_idx < 0) {
+            return;
+        }
 
         _show_msgbox("Ok Jarmin", "before draw back texture", 0);
+
+        char string[20];
+        sprintf(string, "%d", tri_grid_idx);
+        _show_msgbox("Ok Jarmin", string, 0);
+
         // Draw Back Texture
         if (world->tri_grid_depth[tri_grid_idx] > depth)
             draw_left_triangle(screen_x, screen_y, player_tex[RIGHT_FACE * 2], SHADOW);
@@ -47,54 +56,65 @@ typedef struct player {
         if (world->tri_grid_depth[tri_grid_idx] > depth)
             draw_right_triangle(screen_x, screen_y, player_tex[LEFT_FACE * 2 + 1], SHADOW);
 
+        _show_msgbox("Ok Jarmin", "0", 0);
         tri_grid_idx = world->project(x, y, z, MID_FACE);
 
+        _show_msgbox("Ok Jarmin", "1", 0);
         if (world->tri_grid_depth[tri_grid_idx] > depth)
             draw_right_triangle(screen_x - 16, screen_y + 8, player_tex[RIGHT_FACE * 2 + 1], SHADOW);
 
         tri_grid_idx++;
 
+        _show_msgbox("Ok Jarmin", "2", 0);
         if (world->tri_grid_depth[tri_grid_idx] > depth)
             draw_left_triangle(screen_x + 16, screen_y + 8, player_tex[LEFT_FACE * 2], SHADOW);
 
         tri_grid_idx = world->project(x, y, z, BOT_FACE);
 
+        _show_msgbox("Ok Jarmin", "3", 0);
         if (world->tri_grid_depth[tri_grid_idx] > depth)
             draw_left_triangle(screen_x, screen_y + 16, player_tex[TOP_FACE * 2], SHADOW);
 
         tri_grid_idx++;
 
+        _show_msgbox("Ok Jarmin", "4", 0);
         if (world->tri_grid_depth[tri_grid_idx] > depth)
             draw_right_triangle(screen_x, screen_y + 16, player_tex[TOP_FACE * 2 + 1], SHADOW);
 
         // Draw Front Texture
         tri_grid_idx = world->project(x, y, z, TOP_FACE);
 
+        _show_msgbox("Ok Jarmin", "5", 0);
         draw_left_triangle(screen_x, screen_y, player_tex[TOP_FACE * 2],
                            world->tri_grid_depth[tri_grid_idx] >= depth ? 0 : SHADOW);
 
         tri_grid_idx++;
 
+        _show_msgbox("Ok Jarmin", "6", 0);
         draw_right_triangle(screen_x, screen_y, player_tex[TOP_FACE * 2 + 1],
                             world->tri_grid_depth[tri_grid_idx] >= depth ? 0 : SHADOW);
 
         tri_grid_idx = world->project(x, y, z, MID_FACE);
 
+        _show_msgbox("Ok Jarmin", "7", 0);
         draw_right_triangle(screen_x - 16, screen_y + 8, player_tex[LEFT_FACE * 2 + 1],
                             world->tri_grid_depth[tri_grid_idx] >= depth ? 0 : SHADOW);
 
         tri_grid_idx++;
 
+        _show_msgbox("Ok Jarmin", "8", 0);
         draw_left_triangle(screen_x + 16, screen_y + 8, player_tex[RIGHT_FACE * 2],
                            world->tri_grid_depth[tri_grid_idx] >= depth ? 0 : SHADOW);
 
         tri_grid_idx = world->project(x, y, z, BOT_FACE);
 
+        _show_msgbox("Ok Jarmin", "9", 0);
         draw_left_triangle(screen_x, screen_y + 16, player_tex[LEFT_FACE * 2],
                            world->tri_grid_depth[tri_grid_idx] >= depth ? 0 : SHADOW);
 
         tri_grid_idx++;
 
+        _show_msgbox("Ok Jarmin", "10", 0);
         draw_right_triangle(screen_x, screen_y + 16, player_tex[RIGHT_FACE * 2 + 1],
                             world->tri_grid_depth[tri_grid_idx] >= depth ? 0 : SHADOW);
 
